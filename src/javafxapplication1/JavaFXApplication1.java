@@ -3,6 +3,8 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+/*
+
 package javafxapplication1;
 
 import javafx.application.Application;
@@ -17,6 +19,8 @@ import javafx.stage.Stage;
  *
  * @author oumaima
  */
+
+/*
 public class JavaFXApplication1 extends Application {
     
     @Override
@@ -44,8 +48,11 @@ public class JavaFXApplication1 extends Application {
     /**
      * @param args the command line arguments
      */
+/*
     public static void main(String[] args) {
         launch(args);
     }
     
 }
+
+*/
