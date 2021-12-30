@@ -5,6 +5,8 @@
  */
 package javafxapplication1;
 
+import java.util.Arrays;
+
 
 /**
  *
@@ -12,9 +14,9 @@ package javafxapplication1;
  */
 public class Grid {
     
-    private Point tilePos ;  //position de la pièce dans la grille tilePosition
-    private Tile tile;
-    private int[][] grid = new int[10][22];
+    private Point tilePos = new Point(0,0);  //position de la pièce dans la grille tilePosition
+    private static Tile tile = new Tile(Tetrimino.I, 0);
+    public int[][] grid = new int[10][22];
     
 
     public Grid() {
@@ -30,9 +32,25 @@ public class Grid {
         grid[i][j] = 1;  //car la grille contient que des zéros    
     }
     
+    //Drop tile in grid
+    public Point[] dropTile(){
+        System.out.println(Arrays.toString(tileCoordinatesInGrid()));
+        Tile randomTile = Game.randomTile();   
+        System.out.println("state :"+ randomTile.getState());
+        System.out.println(randomTile.getTetrimino().toString());
+
+        Grid.tile = randomTile;
+        collidesAtDown();
+        System.out.println(Arrays.toString(tileCoordinatesInGrid()));
+
+        collidesAtRight();
+        System.out.println(Arrays.toString(tileCoordinatesInGrid()));
+        
+        return tileCoordinatesInGrid();
+    }
    
-    public Point[] tileToGrid(){ //On renvoie la liste des coordonnées des cases occupées
-        Point[] pts = new Point[4];
+    public Point[] tileCoordinatesInGrid(){ //On renvoie la liste des coordonnées des cases occupées
+        Point[] pts = new Point[4]; 
         int n = 0;
         int x = tilePos.getX();
         int y = tilePos.getY();
@@ -48,7 +66,7 @@ public class Grid {
     }
     
     public boolean tileinGrid(){ //On renvoie si la pièce est incluse dans la grille
-        Point[] pts = tileToGrid();
+        Point[] pts = tileCoordinatesInGrid();
         int s=0;
         for(int i=0 ; i<pts.length; i++){
                 int xc = pts[i].getX();
@@ -62,7 +80,7 @@ public class Grid {
     
     //Tester si la pièce aléatoire touche d'autres pièces 
     public boolean collidesAtDown() {
-        Point[] pts = tileToGrid();
+        Point[] pts = tileCoordinatesInGrid();
         int[][] tileConfig = tile.getConfig();
         for(int i=0 ; i<pts.length; i++){
                 if( grid[ pts[i].getX()+1 ][ pts[i].getY()]!=0 ){
@@ -73,7 +91,7 @@ public class Grid {
     }
     
     public boolean collidesAtLeft() {
-        Point[] pts = tileToGrid();
+        Point[] pts = tileCoordinatesInGrid();
         int[][] tileConfig = tile.getConfig();
         for(int i=0 ; i<pts.length; i++){
                 if( grid[ pts[i].getX() ][ pts[i].getY()-1]!=0 ){
@@ -84,7 +102,7 @@ public class Grid {
     }    
 
     public boolean collidesAtRight() {
-        Point[] pts = tileToGrid();
+        Point[] pts = tileCoordinatesInGrid();
         int[][] tileConfig = tile.getConfig();
         for(int i=0 ; i<pts.length; i++){
                 if( grid[ pts[i].getX() ][ pts[i].getY()+1]!=0 ){
@@ -94,7 +112,7 @@ public class Grid {
         return true;
     }    
     public void autoMoveDown() {
-        Point[] pts = tileToGrid();
+        Point[] pts = tileCoordinatesInGrid();
         if ( collidesAtDown()== true){
             for( int i=0;i<pts.length;i++){
                 int xi = pts[i].getX();
@@ -104,7 +122,7 @@ public class Grid {
     }
 
     public void moveLeft(){ // Il faut passer d'un état à l'autre et modifier les coordonnées dans la grille 
-        Point[] pts = tileToGrid();
+        Point[] pts = tileCoordinatesInGrid();
         if ( collidesAtLeft()== true){
             for( int i=0;i<pts.length;i++){
                 int yi = pts[i].getY();
@@ -114,7 +132,7 @@ public class Grid {
     }
 
     public void moveRight() {
-        Point[] pts = tileToGrid();
+        Point[] pts = tileCoordinatesInGrid();
         if ( collidesAtRight()== true){
             for( int i=0;i<pts.length;i++){
                 int yi = pts[i].getY();

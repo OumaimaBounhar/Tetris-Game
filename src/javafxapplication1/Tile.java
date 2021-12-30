@@ -27,4 +27,8 @@ public class Tile {
         return state;
     }
     
+    public Tetrimino getTetrimino() {
+        return tetrimino;
+    }
+    
 }

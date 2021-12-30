@@ -5,6 +5,7 @@
  */
 package tetris;
 
+import java.util.Random;
 import javafx.scene.control.Button;
 import javafx.scene.layout.HBox;
 import javafx.animation.AnimationTimer;
@@ -19,6 +20,7 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.Border;
@@ -34,6 +36,10 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Popup;
+import javafxapplication1.Grid;
+import javafxapplication1.Point;
+import javafxapplication1.Tetrimino;
+import javafxapplication1.Tile;
 
 
 /**
@@ -44,9 +50,9 @@ import javafx.stage.Popup;
 //sous class de rectangle
 //animation : timeline (seperate)
 //message box
+
+// add css for style
 public class Lobby {
-
-
    
    
     public Lobby(Stage stage) {
@@ -54,7 +60,7 @@ public class Lobby {
 
         //Game Scene creation
         final int L = 38*17;        
-        final int H = 38*24;
+        final int H = 28*24;
 
         final GridPane gp = new GridPane();
         final Scene gameScene = new Scene(gp, L, H); //1 case = 38*38 pxl
@@ -135,26 +141,70 @@ public class Lobby {
         stage.setTitle("Tetris");
         stage.show();
 
-    }
-
+    }   
     
+    
+    private void initGrid(Grid gameGrid, GridPane gridPane){
+        
+        int width = gameGrid.grid.length;
+        int height = gameGrid.grid[0].length;
+        
+        System.out.println("w :"+width);
+        System.out.println("h :"+height);
+
+         for(int y = 0; y < height; y++){
+            for(int x = 0; x < width; x++){
+                
+                // Create a new TextField in each Iteration
+                TextField tf = new TextField();
+                tf.setPrefHeight(50);
+                tf.setPrefWidth(50);
+                tf.setAlignment(Pos.CENTER);
+                tf.setEditable(false);
+
+                // Iterate the Index using the loops
+                gridPane.setRowIndex(tf,y);
+                gridPane.setColumnIndex(tf,x);    
+                gridPane.getChildren().add(tf);
+            }
+        }
+    }
 
 
     //Grille où les pièces tombent
     private GridPane bigLeftGrid() {
-        GridPane gridPane = new GridPane();
-
         
+        // display the grid game here
+        GridPane gridPane = new GridPane();
+        Grid gameGrid = new Grid();
+
         
         //gridPane MGMT
         
             //LIEN AVEC LE CODE PRINCIPALE ICI
             
+         //gridPane.addColumn(0, new Label("HOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO"));
+
+        //gridPane.setAlignment(Pos.CENTER);
+        
+        
+        initGrid(gameGrid, gridPane);       
+         
+        Point[] pts = gameGrid.dropTile();
+        
+        
+        for (Point p:pts){
+            TextField tf = new TextField("X");
+            gridPane.setRowIndex(tf,p.getY());
+            gridPane.setColumnIndex(tf,p.getX()); 
+            gridPane.getChildren().add(tf);
+        }
+
 
         //Ajout des Elmts dans gridPane
-        gridPane.add(new javafx.scene.shape.Rectangle(38*10, 38*22, Color.BLUE),2,1,1,1);
-        gridPane.add(new javafx.scene.shape.Rectangle(38, 38, Color.GOLD),0,0,1,1); 
-        gridPane.add(createRect(38, 38, Color.GOLD),3,0,1,1); 
+        //gridPane.add(new javafx.scene.shape.Rectangle(38*10, 38*22, Color.WHITE),2,1,1,1);
+        //gridPane.add(new javafx.scene.shape.Rectangle(38, 38, Color.GOLD),0,0,1,1); 
+        //gridPane.add(createRect(38, 38, Color.GOLD),3,0,1,1); 
 
         return gridPane;
     }
@@ -287,7 +337,7 @@ public class Lobby {
         
     }
     
-        private HBox createHBox(double top, double right, double bottom, double left, Label title) {
+    private HBox createHBox(double top, double right, double bottom, double left, Label title) {
         HBox hbox = new HBox();
         hbox.getChildren().addAll(title);
         hbox.setPadding(new Insets(top, right, bottom, left));

@@ -28,10 +28,5 @@ public class Game {
     public static Tile randomTile(){
        return new Tile( randomTetrimino(), randomState());
    }
+ 
 }
-    
-    //Drop tile in grid
-    public void dropTile( Point[] pts){
-        Tile tile = new Tile.randomTile();
-        
-    }
